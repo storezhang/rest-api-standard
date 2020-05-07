@@ -118,7 +118,24 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 
 ### 分页返回对象
 ```javascript
-
+{
+    // 当前页数
+    "currentPage": 1,
+    // 是否有下一页
+    "hasNext": true,
+    // 是否有前一页
+    "hasPrev": true,
+    // 总的对象数量
+    "totalNum": 30,
+    // 总的页数
+    "totalPage": 2,
+    // 对象列表
+    "items": [
+        {},
+        {},
+        {}
+    ]
+}
 ```
 
 
