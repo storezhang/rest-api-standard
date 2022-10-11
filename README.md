@@ -100,7 +100,7 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 
 - ?limit=10：指定返回记录的数量
 - ?offset=10：指定返回记录的开始位置。
-- ?page=2&perPage=100：指定第几页，以及每页的记录数。
+- ?page=2&size=100：指定第几页，以及每页的记录数。
 - ?sortby=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
 - ?animalTypeId=1：指定筛选条件
 
@@ -112,16 +112,16 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 分页处理在所有的API里都存在，且强烈建议**GET`/zoos`API返回分页对象**
 
 ### 分页请求对象
-```javascript
+```json5
 {
     // 当前页数
     "page": 1,
     // 每页对象个数
-    "perPage": 20,
+    "size": 20,
     // 搜索关键字
     "keyword": "",
     // 排序字段
-    "sortOrder": "id DESC"
+    "order": "id DESC"
 }
 ```
 
@@ -130,18 +130,18 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 - 如果有其它参数，可以再加，基本分页对象就只包含所有分页都需要用到的字段
 
 ### 分页返回对象
-```javascript
+```json5
 {
     // 当前页数
-    "currentPage": 1,
+    "current": 1,
     // 是否有下一页
     "hasNext": true,
     // 是否有前一页
     "hasPrev": true,
     // 总的对象数量
-    "totalNum": 30,
+    "count": 30,
     // 总的页数
-    "totalPage": 2,
+    "total": 2,
     // 对象列表
     "items": [
         {},
@@ -173,7 +173,7 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 ## 错误处理（Error Handling）
 
 如果状态码是4xx，就应该向用户返回出错信息。一般来说，返回的信息中将error作为键名，出错信息作为键值即可
-```javascript
+```json5
 {
     error: "Invalid API key"
 }
@@ -192,10 +192,10 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 - DELETE`/collection/resource`：返回一个空文档
 
 注意：**返回值永远是JSON对象**，严禁返回如下内容（在**很多公司都会这样干，这是严重不对的**）
-```javascript
+```json5
 {
     "msg": "test",
-    "code": 20,
+    "code": 200,
     "data": { // 实际的数据
         "aaa": 1,
         "bbb": 2
@@ -208,14 +208,14 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 返回的JSON格式中的变量名有很多种方式，采用首字母小写的驼峰命名法
 
 ### 反例
-```javascript
+```json5
 {
     "test_field": "testFiled"
 }
 ```
 
 ### 正例
-```javascript
+```json5
 {
     "testField": "testFiled"
 }
@@ -225,7 +225,7 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 ## Hypermedia API
 
 RESTful API最好做到Hypermedia，即返回结果中提供链接，连向其他API方法，使得用户不查文档，也知道下一步应该做什么。比如，当用户向api.example.com的根目录发出请求，会得到这样一个文档
-```javascript
+```json5
 {
     "link": {
         "rel":   "collection https://www.example.com/zoos",
@@ -236,7 +236,7 @@ RESTful API最好做到Hypermedia，即返回结果中提供链接，连向其�
 }
 ```
 上面代码表示，文档中有一个link属性，用户读取这个属性就知道下一步该调用什么API了。rel表示这个API与当前网址的关系（collection关系，并给出该collection的网址），href表示API的路径，title表示API的标题，type表示返回类型。Hypermedia API的设计被称为HATEOAS。Github的API就是这种设计，访问api.github.com会得到一个所有可用API的网址列表
-```javascript
+```json5
 {
   "current_user_url": "https://api.github.com/user",
   "authorizations_url": "https://api.github.com/authorizations",
@@ -244,10 +244,10 @@ RESTful API最好做到Hypermedia，即返回结果中提供链接，连向其�
 }
 ```
 从上面可以看到，如果想获取当前用户的信息，应该去访问api.github.com/user，然后就得到了下面结果
-```javascript
+```json5
 {
   "message": "Requires authentication",
-  "documentation_url": "https://developer.github.com/v3"
+  "documentationUrl": "https://developer.github.com/v3"
 }
 ```
 上面代码表示，服务器给出了提示信息，以及文档的网址
