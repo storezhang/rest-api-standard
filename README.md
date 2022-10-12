@@ -107,7 +107,7 @@ API与用户的通信协议，**总是使用HTTPs协议**，需要注意的是�
 - ?limit=10：指定返回记录的数量
 - ?offset=10：指定返回记录的开始位置。
 - ?page=2&size=100：指定第几页，以及每页的记录数。
-- ?sortby=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
+- ?sort=name&order=asc：指定返回结果按照哪个属性排序，以及排序顺序。
 - ?animalTypeId=1：指定筛选条件
 
 **参数的设计允许存在冗余**，即允许API路径和URL参数偶尔有重复。比如，GET`/zoo/ID/animals`与 GET`/animals?zooId=ID`的含义是相同的
@@ -244,8 +244,8 @@ RESTful API最好做到Hypermedia，即返回结果中提供链接，连向其�
 上面代码表示，文档中有一个link属性，用户读取这个属性就知道下一步该调用什么API了。rel表示这个API与当前网址的关系（collection关系，并给出该collection的网址），href表示API的路径，title表示API的标题，type表示返回类型。Hypermedia API的设计被称为HATEOAS。Github的API就是这种设计，访问api.github.com会得到一个所有可用API的网址列表
 ```json5
 {
-  "current_user_url": "https://api.github.com/user",
-  "authorizations_url": "https://api.github.com/authorizations",
+  "currentUserUrl": "https://api.github.com/user",
+  "authorizationsUrl": "https://api.github.com/authorizations",
   // ...
 }
 ```
